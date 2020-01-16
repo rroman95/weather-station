@@ -1,40 +1,38 @@
-import csv
 import random
-import time
+from itertools import count
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 import bme280_output
-from datetime import datetime
+import os.path
+from datetime import date
 
+plt.style.use('fivethirtyeight')
 
-Time = 0
-Temperature= 0
-Humidity = 0
+x = []
+y1 = []
+y2 = []
 
+humidity, pressure, ambient_temperature = bme280_output.read_all()
 
-fieldnames = ["Time", "Temperature", "Humidity"]
+index = count()
+dir = r"/home/pi/weather-station/data/"
+filename = str(date.today())
 
+def animate(i):
+    data = pd.read_csv(os.path.join(dir,filename+'.csv'))
+    x = data['Time']
+    y1 = data['Temperature']
+    y2 = data['Humidity']
+    plt.cla()
+    plt.plot(x,y1, label = 'Temperature')
+    plt.plot(x,y2, label = 'Humidity')
+    plt.xticks(rotation=90)
+    plt.legend (loc='upper left')
+    plt.tight_layout()
 
-with open('data.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    csv_writer.writeheader()
+ani = FuncAnimation(plt.gcf(), animate, interval=1000)
 
-while True:
+plt.tight_layout()
+plt.show()
 
-    with open('data.csv', 'a') as csv_file:
-        csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-
-        humidity, pressure, ambient_temperature = bme280_output.read_all()
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        info = {
-            "Time": current_time,
-            "Temperature": round(ambient_temperature,2),
-            "Humidity": round(humidity,2)
-        }
-
-        csv_writer.writerow(info)
-        print(current_time,round(ambient_temperature,2), round(humidity,2))
-
-        
-        
-
-    time.sleep(1)
