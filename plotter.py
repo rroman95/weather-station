@@ -16,6 +16,7 @@ x = []
 y1 = []
 y2 = []
 y3 = []
+y4 = []
 min_temp = []
 max_temp = []
 avg_temperature = []
@@ -35,16 +36,18 @@ def animate(i):
         time.sleep(100)
     data = pd.read_csv(os.path.join(dir,filename+'.csv'))
     x = data['Time']
-    y1 = data['Temperature']
+    y1 = data['Temp']
     y2 = data['Humidity']
     y3 = data['Pressure']
+    y4 = data['Grnd.Temp']
     min_temp = data['Min.Temp']
     max_temp = data['Max.Temp']
     avg_temperature = data['Avg.Temp']
     plt.cla()
-    plt.plot(x,y1, label = 'Temperature')
-    plt.plot(x,y2, label = 'Humidity')
-    plt.plot(x,y3, label = 'Bar')
+    plt.plot(x,y1, label = 'Temperature',color = 'red')
+    plt.plot(x,y2, label = 'Humidity', color = 'cyan')
+    plt.plot(x,y3, label = 'Bar', color = 'green')
+    plt.plot(x,y4, 'g--',label = 'Grnd.Temp', color = 'crimson')
     plt.xticks(rotation=90)
     plt.legend (loc='upper left')
     plt.tight_layout()
@@ -52,7 +55,7 @@ def animate(i):
 
 
 
-ani = FuncAnimation(plt.gcf(), animate, interval=1)
+ani = FuncAnimation(plt.gcf(), animate, interval=1800)
 plt.tight_layout()
 plt.show()
 
