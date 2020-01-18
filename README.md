@@ -1,4 +1,3 @@
-# weather-station
-Raspberry Pi - Idöjárás állomás
+Raspberry Pi - Időjárás állomás
 ==============================
-Mikroelektromechanikai rendszerek - GKNB_INTM020 
+[Mikroelektromechanikai rendszerek - GKNB_INTM020]
