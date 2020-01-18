@@ -1,15 +1,15 @@
 #!/bin/env python3
 import csv
-import random
 import time
 import os.path
 import bme280_output
+import ds18b20_therm
 from datetime import datetime
 from datetime import date
 import datetime
 
 dir = r"/home/pi/weather-station/data/"
-fieldnames = ["Time", "Temperature", "Humidity","Pressure",
+fieldnames = ["Time", "Temp","Grnd.Temp", "Humidity","Pressure",
               "Avg.Temp","Avg.Humidity","Avg.Pressure","Min.Temp","Max.Temp"]
 while True:
     
@@ -18,6 +18,7 @@ while True:
     Temperature= 0
     Humidity = 0
     Bar = 0
+    ground_temp = 0
     all_temperature = 0
     all_humidity = 0
     all_bar = 0
@@ -27,12 +28,12 @@ while True:
     max_temp = 0
     min_temp = 0
     NumberOfIterations = 1
+    temp_probe = ds18b20_therm.DS18B20()
     filename = str(date.today())
-    print ("reset timer")
+    print ("reset timer and values")
     humidity, pressure, ambient_temperature = bme280_output.read_all()
     min_temp = ambient_temperature
-    max_temp = ambient_temperature
-    print ("tmp:",ambient_temperature)    
+    max_temp = ambient_temperature   
     with open(os.path.join(dir,filename+'.csv'), 'w') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         csv_writer.writeheader()
@@ -45,6 +46,7 @@ while True:
         with open(os.path.join(dir,filename+'.csv'), 'a') as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             humidity, pressure, ambient_temperature = bme280_output.read_all()
+            ground_temp = temp_probe.read_temp()
             current_time = now.strftime("%H:%M:%S")
             Bar = pressure / 1000
             
@@ -63,7 +65,8 @@ while True:
             
             info = {
                 "Time": current_time,
-                "Temperature": round(ambient_temperature,2),
+                "Temp": round(ambient_temperature,2),
+                "Grnd.Temp": round(ground_temp,2),
                 "Humidity": round(humidity,2),
                 "Pressure": round(Bar,2),
                 "Avg.Temp": round(avg_temperature,2),
@@ -74,10 +77,10 @@ while True:
             }
 
             csv_writer.writerow(info)
-            print(current_time,round(ambient_temperature,2), round(humidity,2),round (Bar,2))
+            print(current_time,round(ambient_temperature,2),round(ground_temp,2), round(humidity,2),round (Bar,2))
 
             
-            time.sleep(1)
+            time.sleep(3600)
             NumberOfIterations += 1
             now = datetime.datetime.now()   
     time.sleep(90)
