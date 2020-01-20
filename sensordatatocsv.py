@@ -33,6 +33,7 @@ while True:
     humidity, pressure, ambient_temperature = bme280_output.read_all()
     min_temp = ambient_temperature
     max_temp = ambient_temperature   
+    
     with open(os.path.join(dir,filename+'.csv'), 'w') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         csv_writer.writeheader()
