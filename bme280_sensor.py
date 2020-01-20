@@ -15,3 +15,5 @@ while True:
     ambient_temperature = bme280_data.temperature
     print(humidity, pressure, ambient_temperature)
     sleep(1)
+
+    
