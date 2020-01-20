@@ -12,8 +12,7 @@ dir = r"/home/pi/weather-station/data/"
 fieldnames = ["Time", "Temp","Grnd.Temp", "Humidity","Pressure",
               "Avg.Temp","Avg.Humidity","Avg.Pressure","Min.Temp","Max.Temp"]
 while True:
-    
-    
+       
     Time = 0
     Temperature= 0
     Humidity = 0
@@ -78,8 +77,7 @@ while True:
 
             csv_writer.writerow(info)
             print(current_time,round(ambient_temperature,2),round(ground_temp,2), round(humidity,2),round (Bar,2))
-
-            
+         
             time.sleep(3600)
             NumberOfIterations += 1
             now = datetime.datetime.now()   
