@@ -8,8 +8,6 @@ def sendtophone():
     dir = r"/home/pi/weather-station/data/"
     filename = str(date.today())
 
-
-
     humidity, pressure, ambient_temperature = bme280_output.read_all()
     temperature = round(ambient_temperature,2)
     humidity = round(humidity,2)
